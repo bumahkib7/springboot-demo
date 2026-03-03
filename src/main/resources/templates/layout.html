@@ -80,11 +80,18 @@
 <nav th:fragment="nav" class="nav">
     <div class="nav-brand"><span>Runix</span> Demo</div>
     <div class="nav-links">
-        <a href="/" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">Dashboard</a>
-        <a href="/notes" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/notes') ? 'active' : ''}">Notes</a>
-        <a href="/kafka" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/kafka') ? 'active' : ''}">Kafka</a>
-        <a href="/files" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/files') ? 'active' : ''}">Files</a>
+        <a href="/">Dashboard</a>
+        <a href="/notes">Notes</a>
+        <a href="/kafka">Kafka</a>
+        <a href="/files">Files</a>
     </div>
 </nav>
+<script th:fragment="navscript">
+    document.querySelectorAll('.nav-links a').forEach(function(a) {
+        if (a.pathname === '/' ? location.pathname === '/' : location.pathname.startsWith(a.pathname)) {
+            a.classList.add('active');
+        }
+    });
+</script>
 </body>
 </html>
