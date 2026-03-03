@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: *}">
-<head><title>Kafka — Runix Demo</title></head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Kafka — Runix Demo')}"></head>
 <body>
-<div class="container" th:fragment="content">
+<nav th:replace="~{layout :: nav}"></nav>
+<div class="container">
 
     <h1 style="font-size: 1.5rem; margin-bottom: .25rem; color: #fff;">Kafka Messages</h1>
     <p style="color: #666; margin-bottom: 1.5rem; font-size: .85rem;">

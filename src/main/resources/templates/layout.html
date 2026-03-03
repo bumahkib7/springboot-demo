@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<!-- Reusable <head> fragment -->
+<head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle} ?: 'Runix Demo'">Runix Demo</title>
+    <title th:text="${title}">Runix Demo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; min-height: 100vh; }
@@ -72,18 +74,17 @@
         }
     </style>
 </head>
+
 <body>
-    <nav class="nav">
-        <div class="nav-brand"><span>Runix</span> Demo</div>
-        <div class="nav-links">
-            <a href="/" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">Dashboard</a>
-            <a href="/notes" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/notes') ? 'active' : ''}">Notes</a>
-            <a href="/kafka" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/kafka') ? 'active' : ''}">Kafka</a>
-            <a href="/files" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/files') ? 'active' : ''}">Files</a>
-        </div>
-    </nav>
-    <div class="container" th:fragment="content">
-        <!-- page content injected here -->
+<!-- Reusable nav fragment -->
+<nav th:fragment="nav" class="nav">
+    <div class="nav-brand"><span>Runix</span> Demo</div>
+    <div class="nav-links">
+        <a href="/" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">Dashboard</a>
+        <a href="/notes" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/notes') ? 'active' : ''}">Notes</a>
+        <a href="/kafka" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/kafka') ? 'active' : ''}">Kafka</a>
+        <a href="/files" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/files') ? 'active' : ''}">Files</a>
     </div>
+</nav>
 </body>
 </html>
