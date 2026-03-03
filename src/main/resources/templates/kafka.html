@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: *}">
+<head><title>Kafka — Runix Demo</title></head>
+<body>
+<div class="container" th:fragment="content">
+
+    <h1 style="font-size: 1.5rem; margin-bottom: .25rem; color: #fff;">Kafka Messages</h1>
+    <p style="color: #666; margin-bottom: 1.5rem; font-size: .85rem;">
+        Send a message to Kafka. The consumer picks it up and saves it to
+        <span class="badge badge-blue" style="font-size:.7rem;">PostgreSQL</span>.
+        You'll see both the <span class="tag-sent">SENT</span> and
+        <span class="tag-received">RECEIVED</span> entries below.
+    </p>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- Send form -->
+    <div class="card">
+        <h2>Publish Message</h2>
+        <form action="/kafka/send" method="post" style="display:flex;gap:.75rem;align-items:flex-end;">
+            <div class="form-group" style="flex:1;margin-bottom:0;">
+                <label>Message payload</label>
+                <input type="text" name="message" placeholder="Hello from Runix!" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="background:#059669;height:38px;">Send to Kafka</button>
+        </form>
+    </div>
+
+    <!-- Message log -->
+    <div class="card">
+        <h2>Message Log <span style="font-weight:400;font-size:.8rem;color:#666;">(last 50)</span></h2>
+        <div th:if="${#lists.isEmpty(messages)}" class="empty">No messages yet. Send one above!</div>
+        <table th:unless="${#lists.isEmpty(messages)}">
+            <thead>
+                <tr><th>Direction</th><th>Key</th><th>Payload</th><th>Topic</th><th>Time</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="msg : ${messages}">
+                    <td>
+                        <span th:if="${msg.direction == 'SENT'}" class="badge" style="background:#0c1f3d;color:#60a5fa;border:1px solid #1e3a5f;font-size:.7rem;">SENT</span>
+                        <span th:if="${msg.direction == 'RECEIVED'}" class="badge badge-green" style="font-size:.7rem;">RECEIVED</span>
+                    </td>
+                    <td style="font-family:monospace;font-size:.8rem;color:#999;" th:text="${msg.key}"></td>
+                    <td style="color:#fff;" th:text="${msg.payload}"></td>
+                    <td style="font-size:.8rem;color:#666;" th:text="${msg.topic}"></td>
+                    <td style="font-size:.8rem;color:#666;" th:text="${#temporals.format(msg.timestamp, 'HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

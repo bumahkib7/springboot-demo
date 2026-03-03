@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: *}">
+<head><title>Dashboard — Runix Demo</title></head>
+<body>
+<div class="container" th:fragment="content">
+
+    <h1 style="font-size: 1.5rem; margin-bottom: .5rem; color: #fff;">Service Dashboard</h1>
+    <p style="color: #666; margin-bottom: 1.5rem; font-size: .9rem;">
+        This Spring Boot app was deployed on <strong style="color:#a78bfa">Runix</strong> with zero config.
+        PostgreSQL, Kafka, and S3 were provisioned automatically.
+    </p>
+
+    <!-- Service Status -->
+    <div class="card">
+        <h2>Service Health</h2>
+        <table>
+            <tr>
+                <td style="width:40%"><strong>PostgreSQL</strong></td>
+                <td>
+                    <span th:if="${pgStatus}" class="badge badge-green"><span class="dot dot-green"></span> Connected</span>
+                    <span th:unless="${pgStatus}" class="badge badge-red"><span class="dot dot-red"></span> Disconnected</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Kafka</strong></td>
+                <td>
+                    <span th:if="${kafkaStatus}" class="badge badge-green"><span class="dot dot-green"></span> Connected</span>
+                    <span th:unless="${kafkaStatus}" class="badge badge-red"><span class="dot dot-red"></span> Disconnected</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>S3 / MinIO</strong></td>
+                <td>
+                    <span th:if="${s3Status}" class="badge badge-green"><span class="dot dot-green"></span> Connected</span>
+                    <span th:unless="${s3Status}" class="badge badge-red"><span class="dot dot-red"></span> Disconnected</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid-3">
+        <div class="stat-card">
+            <div class="stat-value" th:text="${noteCount}">0</div>
+            <div class="stat-label">Notes in Postgres</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${kafkaCount}">0</div>
+            <div class="stat-label">Kafka Messages</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${fileCount}">0</div>
+            <div class="stat-label">Files in S3</div>
+        </div>
+    </div>
+
+    <!-- Quick links -->
+    <div class="card" style="margin-top: 1rem;">
+        <h2>Try It Out</h2>
+        <div style="display: flex; gap: .75rem; flex-wrap: wrap;">
+            <a href="/notes" class="btn btn-primary">Create a Note + Upload</a>
+            <a href="/kafka" class="btn btn-primary" style="background:#059669;">Send a Kafka Message</a>
+            <a href="/files" class="btn btn-primary" style="background:#d97706;">Browse S3 Files</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

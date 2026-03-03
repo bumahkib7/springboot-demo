@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: *}">
+<head><title>Notes — Runix Demo</title></head>
+<body>
+<div class="container" th:fragment="content">
+
+    <h1 style="font-size: 1.5rem; margin-bottom: .25rem; color: #fff;">Notes</h1>
+    <p style="color: #666; margin-bottom: 1.5rem; font-size: .85rem;">
+        Persisted in <span class="badge badge-blue" style="font-size:.7rem;">PostgreSQL</span>
+        &middot; Attachments stored in <span class="badge badge-purple" style="font-size:.7rem;">S3</span>
+    </p>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <!-- Create form -->
+    <div class="card">
+        <h2>New Note</h2>
+        <form action="/notes" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="My note title" required>
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea name="content" placeholder="Write something..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Attachment (optional — uploaded to S3)</label>
+                <input type="file" name="file" style="color:#999; font-size:.85rem;">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Note</button>
+        </form>
+    </div>
+
+    <!-- Notes list -->
+    <div class="card">
+        <h2>All Notes</h2>
+        <div th:if="${#lists.isEmpty(notes)}" class="empty">No notes yet. Create one above!</div>
+        <table th:unless="${#lists.isEmpty(notes)}">
+            <thead>
+                <tr><th>Title</th><th>Content</th><th>Attachment</th><th>Created</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="note : ${notes}">
+                    <td th:text="${note.title}" style="font-weight:600;color:#fff;"></td>
+                    <td th:text="${#strings.abbreviate(note.content, 60)}"></td>
+                    <td>
+                        <a th:if="${note.attachmentKey}" th:href="'/notes/' + ${note.id} + '/attachment'"
+                           th:text="${note.attachmentName}" style="font-size:.8rem;"></a>
+                        <span th:unless="${note.attachmentKey}" style="color:#555;">—</span>
+                    </td>
+                    <td style="font-size:.8rem;color:#666;" th:text="${#temporals.format(note.createdAt, 'MMM d, HH:mm')}"></td>
+                    <td>
+                        <form th:action="'/notes/' + ${note.id} + '/delete'" method="post" style="margin:0;">
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
